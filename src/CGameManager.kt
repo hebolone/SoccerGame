@@ -38,11 +38,11 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         m_Teams = mutableListOf()
 
         //  Generate team names
-        val teamsNames = ('A'..'Z').toList()
+        val teamsNames = ('A'..'Z').toList().map { it.toString() }
 
         //  Generate teams
         (1..m_NumberOfTeams).forEach({
-            m_Teams.add(CTeam(teamsNames[it - 1].toString()))
+            m_Teams.add(CTeam(teamsNames[it - 1]))
         })
 
         //  Generate calendar with all matches
@@ -50,19 +50,23 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
 
         //  Points
         m_Calendar.Matches.forEach {
-            if(it.ScoreA > it.ScoreB) {
-                it.TeamA.Score += m_TableOfScores[0]
-                it.TeamA.Won ++
-                it.TeamB.Lost ++
-            } else if(it.ScoreB > it.ScoreA) {
-                it.TeamB.Score += m_TableOfScores[0]
-                it.TeamA.Lost ++
-                it.TeamB.Won ++
-            } else {
-                it.TeamA.Score += m_TableOfScores[1]
-                it.TeamB.Score += m_TableOfScores[1]
-                it.TeamA.Draw ++
-                it.TeamB.Draw ++
+            when {
+                it.ScoreA > it.ScoreB -> {
+                    it.TeamA.Score += m_TableOfScores[0]
+                    it.TeamA.Won ++
+                    it.TeamB.Lost ++
+                }
+                it.ScoreB > it.ScoreA -> {
+                    it.TeamB.Score += m_TableOfScores[0]
+                    it.TeamA.Lost ++
+                    it.TeamB.Won ++
+                }
+                else -> {
+                    it.TeamA.Score += m_TableOfScores[1]
+                    it.TeamB.Score += m_TableOfScores[1]
+                    it.TeamA.Draw ++
+                    it.TeamB.Draw ++
+                }
             }
             it.TeamA.GoalsDone += it.ScoreA
             it.TeamA.GoalsTaken += it.ScoreB
@@ -71,7 +75,6 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         }
     }
     //  *** DATA TYPES ***
-    private data class CMatch(val TeamA : CTeam, val TeamB : CTeam, val ScoreA : Int, val ScoreB : Int) { }
     private class CCalendar(iTeams : MutableList<CTeam>, iHomeAndAway : Boolean = false) {
         private var m_Matches : MutableList<CMatch> = mutableListOf()
         private val m_Random = Random()
@@ -136,4 +139,11 @@ data class CTeam(
     var Draw : Int = 0,
     var Lost : Int = 0
     )
+//----------------------------------------------------------------------------------------------------------------------
+data class CMatch(
+    val TeamA : CTeam,
+    val TeamB : CTeam,
+    val ScoreA : Int,
+    val ScoreB : Int
+)
 //----------------------------------------------------------------------------------------------------------------------
