@@ -37,13 +37,10 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         m_NumberOfTeams = iNumberOfTeams
         m_Teams = mutableListOf()
 
-        //  Generate team names
-        val teamsNames = ('A'..'Z').toList().map { it.toString() }
-
-        //  Generate teams
-        (1..m_NumberOfTeams).forEach({
-            m_Teams.add(CTeam(teamsNames[it - 1]))
-        })
+        //  Generate team names and teams
+        ('A'..'Z').toList().map { it.toString() }.take(m_NumberOfTeams).forEach {
+            m_Teams.add(CTeam(it))
+        }
 
         //  Generate calendar with all matches
         m_Calendar = CCalendar(m_Teams, Options.HomeAndAway)
