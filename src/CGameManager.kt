@@ -28,7 +28,7 @@ class CGameManager {
         Options.GoalWeights.forEachIndexed {
             id, weight ->
             to = from + weight - 1
-            println("$id goal -> $weight (from $from to $to")
+            println("$id goal -> $weight (from $from to $to)")
             from += weight
         }
     }
@@ -86,7 +86,7 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         private val m_TotalWeight = m_GoalWeights.sum()
         init {
             iTeams.forEachIndexed { index, cTeam ->
-                iTeams.filterIndexed { otIndex, otTeam -> otIndex > index }.forEach {
+                iTeams.filterIndexed { otIndex, _ -> otIndex > index }.forEach {
                     var results = GenerateScore()
                     m_Matches.add(CMatch(cTeam, it, results.first, results.second))
                     if(iHomeAndAway) {
