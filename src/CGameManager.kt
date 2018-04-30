@@ -1,3 +1,4 @@
+import com.sun.xml.internal.fastinfoset.util.StringArray
 import kotlin.properties.Delegates
 import java.util.Random
 
@@ -37,11 +38,11 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         m_Teams = mutableListOf()
 
         //  Generate team names
-        val teamsNames = "A,B,C,D,E,F,G,H,I,J,K,L".split(",")
+        val teamsNames = ('A'..'Z').toList()
 
         //  Generate teams
         (1..m_NumberOfTeams).forEach({
-            m_Teams.add(CTeam(teamsNames[it - 1]))
+            m_Teams.add(CTeam(teamsNames[it - 1].toString()))
         })
 
         //  Generate calendar with all matches
