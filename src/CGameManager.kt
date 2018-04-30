@@ -1,4 +1,3 @@
-import com.sun.xml.internal.fastinfoset.util.StringArray
 import kotlin.properties.Delegates
 import java.util.Random
 
@@ -23,22 +22,30 @@ class CGameManager {
     fun ShowSolution() {
         m_Game.ShowMatches()
     }
+    fun ShowGoalWeights() {
+        var from = 0
+        var to : Int
+        Options.GoalWeights.forEachIndexed {
+            id, weight ->
+            to = from + weight - 1
+            println("$id goal -> $weight (from $from to $to")
+            from += weight
+        }
+    }
 }
 
 class CGame(iID : Int, iNumberOfTeams : Int) {
-    private var m_ID : Int = iID
-    private var m_NumberOfTeams : Int by Delegates.notNull()
+    private val m_ID = iID
+    private val m_NumberOfTeams = iNumberOfTeams
     private var m_Teams : MutableList<CTeam> by Delegates.notNull()
     private var m_Calendar : CCalendar by Delegates.notNull()
     private val m_TableOfScores : List<Int> = listOf(3, 1, 0)   //  Points for winning, drawing and losing
     init {
         //  Init vars
-        m_ID = iID
-        m_NumberOfTeams = iNumberOfTeams
         m_Teams = mutableListOf()
 
         //  Generate team names and teams
-        ('A'..'Z').toList().map { it.toString() }.take(m_NumberOfTeams).forEach {
+        ('A'..'Z').toList().map { it.toString() }.take(iNumberOfTeams).forEach {
             m_Teams.add(CTeam(it))
         }
 
@@ -75,8 +82,8 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
     private class CCalendar(iTeams : MutableList<CTeam>, iHomeAndAway : Boolean = false) {
         private var m_Matches : MutableList<CMatch> = mutableListOf()
         private val m_Random = Random()
-        private val m_Probabilities = listOf(50, 60, 35, 15, 10, 5, 1)
-        private val m_TotalWeight = m_Probabilities.sum()
+        private val m_GoalWeights = Options.GoalWeights
+        private val m_TotalWeight = m_GoalWeights.sum()
         init {
             iTeams.forEachIndexed { index, cTeam ->
                 iTeams.filterIndexed { otIndex, otTeam -> otIndex > index }.forEach {
@@ -96,10 +103,10 @@ class CGame(iID : Int, iNumberOfTeams : Int) {
         private fun GeneratesRandomNumber() : Int {
             val rnd = m_Random.nextInt(m_TotalWeight)
             var index = 0
-            var weight = m_Probabilities[index]
+            var weight = m_GoalWeights[index]
             while(rnd >= weight) {
                 index ++
-                weight += m_Probabilities[index]
+                weight += m_GoalWeights[index]
             }
             return index
         }
