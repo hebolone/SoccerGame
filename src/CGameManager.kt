@@ -101,13 +101,13 @@ class CGameManager {
         m_Game?.Teams?.sortedWith(compareBy({ it.Score}))?.reversed()?.forEach {
             val wdl = if(Options.ShowWDL) ", WDL (${it.Won}, ${it.Draw}, ${it.Lost})" else ""
             println("${it.Name} - ${it.Score} points, Goals (${it.GoalsDone}, ${it.GoalsTaken})$wdl")
-        }
+        } ?: println("No game created")
     }
     fun ShowSolution() {
         m_Game?.Matches?.forEachIndexed {
             id, match ->
-            println("Match ${id + 1} : ${match.TeamA.Name} - ${match.TeamB.Name} ${match.ScoreA} - ${match.ScoreB}")
-        }
+            println("Match ${id + 1} : ${match.TeamA.Name} - ${match.TeamB.Name} = ${match.ScoreA} - ${match.ScoreB}")
+        } ?: println("No game created")
     }
     fun ShowGoalWeights() {
         var from = 0
