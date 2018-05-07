@@ -10,6 +10,8 @@ class CGameManager {
         private val m_GoalWeights = Options.GoalWeights
         private val m_TotalWeight = m_GoalWeights.sum()
         private val m_TableOfScores : List<Int> = listOf(3, 1, 0)   //  Points for winning, drawing and losing
+        private val WIN = 0
+        private val DRAW = 1
         init {
             iTeams.forEachIndexed { index, cTeam ->
                 iTeams.filterIndexed { otIndex, _ -> otIndex > index }.forEach {
@@ -26,18 +28,18 @@ class CGameManager {
             Matches.forEach {
                 when {
                     it.ScoreA > it.ScoreB -> {
-                        it.TeamA.Score += m_TableOfScores[0]
+                        it.TeamA.Score += m_TableOfScores[WIN]
                         it.TeamA.Won ++
                         it.TeamB.Lost ++
                     }
-                    it.ScoreB > it.ScoreA -> {
-                        it.TeamB.Score += m_TableOfScores[0]
+                    it.ScoreA < it.ScoreB -> {
+                        it.TeamB.Score += m_TableOfScores[WIN]
                         it.TeamA.Lost ++
                         it.TeamB.Won ++
                     }
                     else -> {
-                        it.TeamA.Score += m_TableOfScores[1]
-                        it.TeamB.Score += m_TableOfScores[1]
+                        it.TeamA.Score += m_TableOfScores[DRAW]
+                        it.TeamB.Score += m_TableOfScores[DRAW]
                         it.TeamA.Draw ++
                         it.TeamB.Draw ++
                     }
@@ -69,7 +71,8 @@ class CGameManager {
     //  *** MEMBERS ***
     private var m_ID : Int = 0
     private var m_Game : CGame? = null
-    private val m_FileName = "game.datas"
+    private val m_FileName = Options.GameFile
+    private val m_PromptGameNull = "No current game"
     //  *** METHODS ***
     fun NewGame(iNoOfTeams : Int) {
         val id = ++ m_ID
@@ -93,22 +96,20 @@ class CGameManager {
     }
     fun CurrentGame() {
         if(m_Game == null)
-            println("No current game")
+            println(m_PromptGameNull)
         else
             println("ID: ${m_Game?.ID}, Number of teams: ${m_Game?.Teams?.size}")
     }
-    fun ShowQuestion() {
+    fun ShowQuestion() =
         m_Game?.Teams?.sortedWith(compareBy({ it.Score}))?.reversed()?.forEach {
             val wdl = if(Options.ShowWDL) ", WDL (${it.Won}, ${it.Draw}, ${it.Lost})" else ""
             println("${it.Name} - ${it.Score} points, Goals (${it.GoalsDone}, ${it.GoalsTaken})$wdl")
-        } ?: println("No game created")
-    }
-    fun ShowSolution() {
+        } ?: println(m_PromptGameNull)
+    fun ShowSolution() =
         m_Game?.Matches?.forEachIndexed {
             id, match ->
             println("Match ${id + 1} : ${match.TeamA.Name} - ${match.TeamB.Name} = ${match.ScoreA} - ${match.ScoreB}")
-        } ?: println("No game created")
-    }
+        } ?: println(m_PromptGameNull)
     fun ShowGoalWeights() {
         var from = 0
         var to : Int
