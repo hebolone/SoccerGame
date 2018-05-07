@@ -71,7 +71,6 @@ class CGameManager {
     //  *** MEMBERS ***
     private var m_ID : Int = 0
     private var m_Game : CGame? = null
-    private val m_FileName = Options.GameFile
     private val m_PromptGameNull = "No current game"
     //  *** METHODS ***
     fun NewGame(iNoOfTeams : Int) {
@@ -121,7 +120,7 @@ class CGameManager {
         }
     }
     fun LoadDatas() {
-        val fm = CFileManager(m_FileName)
+        val fm = CFileManager(Options.GameFile)
         val game = fm.LoadDatas()
         try {
             m_Game = game!!
@@ -131,7 +130,7 @@ class CGameManager {
         }
     }
     fun SaveDatas() {
-        val fm = CFileManager(m_FileName)
+        val fm = CFileManager(Options.GameFile)
         try {
             fm.SaveDatas(m_Game!!)
         }
