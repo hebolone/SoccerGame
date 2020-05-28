@@ -8,7 +8,7 @@
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-test.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jdk7.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jdk8.jar" path-in-jar="/" />
-      <element id="library" level="application" name="Sm3PTools" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Sm3PTools/out/artifacts/Sm3PTools_jar/Sm3PTools.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
