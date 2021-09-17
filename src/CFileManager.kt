@@ -10,7 +10,7 @@ class CFileManager(iFileName : String) {
     private val m_FileName = iFileName
     //  *** METHODS ***
     fun SaveDatas(iGame : CGame) {
-        ObjectOutputStream(FileOutputStream(m_FileName)).use{ it.writeObject(iGame)}
+        ObjectOutputStream(FileOutputStream(m_FileName)).use{ it.writeObject(iGame) }
     }
     fun LoadDatas() : CGame? {
         var retValue : CGame? = null
